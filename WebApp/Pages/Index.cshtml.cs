@@ -19,11 +19,8 @@ public class IndexModel : PageModel
 
     private readonly CustomVisionOptions _options;
 
-    public string TempFile { get; set; }
-
     public int NumberOfDucks { get; set; } = 0;
-
-    // public string? Endpoint;
+    
 
     public IFormFile Upload { get; set; }
 
@@ -47,8 +44,6 @@ public class IndexModel : PageModel
 
     public async Task OnPostAsync()
     {
-        _logger.LogInformation("ProjectID {}", _options.ProjectID);
-        
         if (Upload.Length <= 0)
             return;
 
@@ -56,7 +51,7 @@ public class IndexModel : PageModel
         var filename = "current" + Path.GetExtension(Upload.FileName);
         var filePath = Path.Combine(uploads, filename);
         Console.WriteLine(filePath);
-        TempFile = filename;
+
         await using (var fileStream = new FileStream(filePath, FileMode.Create))
         {
             await Upload.CopyToAsync(fileStream);
@@ -79,8 +74,7 @@ public class IndexModel : PageModel
 
             var imageWidth = image.Width;
             var imageHeight = image.Height;
-
-            _logger.LogInformation("Image width {}", imageWidth);
+            
             var handPath = Path.Combine(uploads, "pointing-finger.png");
             using (var handImage = await Image.LoadAsync(handPath))
             {
@@ -111,7 +105,6 @@ public class IndexModel : PageModel
             }
 
             var mutatedPath = Path.Combine(uploads, "mutated.jpg");
-            _logger.LogInformation("Mutated path {}", mutatedPath);
 
             await copy.SaveAsync(mutatedPath);
         }
