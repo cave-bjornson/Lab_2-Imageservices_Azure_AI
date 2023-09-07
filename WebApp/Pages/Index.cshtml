@@ -1,0 +1,25 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">
+        @{
+            var message = Model.NumberOfDucks switch
+            {
+                0 => "No Ducks Found",
+                1 => "One Duck Found",
+                _ => $"{Model.NumberOfDucks} Ducks Found"
+                };
+
+            @message
+        }
+    </h1>
+    <img src="uploads/mutated.jpg" class="img-fluid" asp-append-version="true" alt=""/>
+    <form method="post" enctype="multipart/form-data">
+        <input type="file" asp-for="Upload"/>
+        <input type="submit"/>
+    </form>
+</div>
